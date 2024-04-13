@@ -143,7 +143,7 @@ class PrimsMaze(BaseMaze):
     def prims(self):
     
         current_cell = (random.randint(0, self.width - 1), random.randint(0, self.height - 1))
-        self.visited[current_cell[1]][current_cell[0]] = True
+        self.visited[current_cell[0]][current_cell[1]] = True
         walls = self.get_cell_walls(current_cell)
 
         while walls:
@@ -151,11 +151,11 @@ class PrimsMaze(BaseMaze):
             cell1, cell2 = self.get_cells_adjacent_to_wall(wall)
 
             if cell1 and cell2:
-                if self.visited[cell1[1]][cell1[0]] != self.visited[cell2[1]][cell2[0]]:
+                if self.visited[cell1[0]][cell1[1]] != self.visited[cell2[0]][cell2[1]]:
                     self.add_edge(cell1, cell2) 
                     for cell in (cell1, cell2):
-                        if not self.visited[cell[1]][cell[0]]:
-                            self.visited[cell[1]][cell[0]] = True
+                        if not self.visited[cell[0]][cell[1]]:
+                            self.visited[cell[0]][cell[1]] = True
                             walls.extend(self.get_cell_walls(cell))
 
             walls.remove(wall)
@@ -217,7 +217,12 @@ class KruskalsMaze(BaseMaze):
 
         random.shuffle(self.walls)
 
+        edge_count = 0
+
         for wall in self.walls:
+            if edge_count == self.width * self.height - 1:
+                break
+            
             cell1, cell2 = wall
             set1 = self.find_set(cell1)
             set2 = self.find_set(cell2)
@@ -225,6 +230,7 @@ class KruskalsMaze(BaseMaze):
             if set1 != set2:
                 self.union_sets(set1, set2)
                 self.add_edge(cell1, cell2)
+                edge_count += 1
 
     def generate_maze(self):
         self.kruskals()
@@ -502,14 +508,14 @@ def run_game():
                 pygame.quit()
                 sys.exit()
 
-        dfs_maze.draw_maze(screen)
+        #dfs_maze.draw_maze(screen)
         #prims_maze.draw_maze(screen)
         #kruskals_maze.draw_maze(screen)
         #recursive_division_maze.draw_maze(screen)
         #binary_tree_maze.draw_maze(screen)
         #sidewinder_maze.draw_maze(screen)
         #aldous_broder_maze.draw_maze(screen)
-        #wilsons_maze.draw_maze(screen)
+        wilsons_maze.draw_maze(screen)
 
         pygame.display.flip()
         clock.tick(60)
