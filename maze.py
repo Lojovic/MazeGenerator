@@ -296,7 +296,7 @@ class BinaryTreeMaze(BaseMaze):
             for x in range(self.width):
                 neighbors = []
 
-                if y < 0:
+                if y > 0:
                     neighbors.append((x, y - 1))
                 if x > 0:
                     neighbors.append((x - 1, y))
